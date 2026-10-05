@@ -1,0 +1,414 @@
+:root {
+  --primary-color: #9c27b0;
+  --accent-color: #00e676;
+  --danger-color: #ff1744;
+  --warning-color: #ffd700;
+  --bg-gradient: linear-gradient(135deg, #12002b 0%, #2a0845 50%, #10001e 100%);
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --card-border: rgba(255, 255, 255, 0.18);
+  --text-color: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Fredoka', sans-serif;
+}
+
+body {
+  background: var(--bg-gradient);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.container {
+  max-width: 680px;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* TOP BAR */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.badge-streak {
+  background: linear-gradient(45deg, #ff9100, #ff3d00);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px rgba(255, 145, 0, 0.5);
+}
+
+.btn-icon {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--card-border);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 2.2rem;
+  text-shadow: 0 0 15px rgba(156, 39, 176, 0.8);
+  color: #f3e5f5;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.game-card, .stats-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 25px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* CONTROLES DE META E DIFICULDADE */
+.mode-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.buttons-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-mode {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  flex: 1;
+}
+
+.btn-mode.active {
+  background: var(--primary-color);
+  border-color: #ea80fc;
+  box-shadow: 0 0 14px rgba(156, 39, 176, 0.7);
+}
+
+.target-control-box {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 12px 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.target-control-box label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.target-slider-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.target-slider-group input[type="range"] {
+  flex: 1;
+  accent-color: #00e676;
+  cursor: pointer;
+}
+
+.target-slider-group input[type="number"] {
+  width: 60px;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--primary-color);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--warning-color);
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* CALDEIRÃO */
+.cauldron-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0 20px;
+}
+
+.cauldron-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.cauldron {
+  font-size: 85px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  user-select: none;
+  animation: float 3s ease-in-out infinite;
+}
+
+.cauldron:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.cauldron.shake {
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-12px) rotate(-5deg); }
+  75% { transform: translateX(12px) rotate(5deg); }
+}
+
+.cauldron.win-anim {
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+.recipe-target {
+  margin-top: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+  color: var(--warning-color);
+  text-align: center;
+}
+
+/* ROLETAS DOS INGREDIENTES E NOMES */
+.slots-container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.slot-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  padding: 12px 8px;
+  flex: 1;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slot-box.result-box {
+  border-color: var(--warning-color);
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.slot-label {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.slot-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+}
+
+.ingredient-name {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ea80fc;
+  min-height: 28px;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-box .ingredient-name {
+  color: var(--warning-color);
+}
+
+.slot-operator {
+  font-size: 1.6rem;
+  font-weight: bold;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+}
+
+/* BOTÃO DE AÇÃO */
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(45deg, #00e676, #00b0ff);
+  color: #052000;
+  border: none;
+  padding: 16px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 230, 118, 0.4);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 230, 118, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.result-message {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  min-height: 45px;
+  line-height: 1.4;
+}
+
+.result-message.win { color: var(--accent-color); text-shadow: 0 0 12px rgba(0, 230, 118, 0.6); }
+.result-message.lose { color: var(--danger-color); text-shadow: 0 0 12px rgba(255, 23, 68, 0.6); }
+
+/* ESTATÍSTICAS */
+.stats-card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.stat-number { display: block; font-size: 1.4rem; font-weight: 700; }
+.stat-title { font-size: 0.7rem; opacity: 0.75; }
+
+.stat-box.success .stat-number { color: var(--accent-color); }
+.stat-box.danger .stat-number { color: var(--danger-color); }
+.stat-box.highlight .stat-number { color: var(--warning-color); }
+
+.probability-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.bar-bg {
+  height: 14px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+.expected-fill { background: rgba(255, 255, 255, 0.25); }
+.actual-fill { background: linear-gradient(90deg, #00e676, #00b0ff); }
+
+@media (max-width: 520px) {
+  .slots-container { flex-direction: column; }
+  .slot-operator { justify-content: center; transform: rotate(90deg); margin: 2px 0; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .buttons-group { flex-direction: column; }
+}
